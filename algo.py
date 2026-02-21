@@ -24,12 +24,13 @@ def rearrange(input_img, target_img, rad):
     rad_pxls_h = int(h * rad)
     rad_pxls_w = int(w * rad)
     taken = []
+    count = 0
+    tot_pix = w * h
 
-    for i in range(0, w * h):
+    for i in range(0, tot_pix):
         r, c = get_rc(i, w)
 
         closest = 0
-        count = 0
         index = [0, 0]
 
         for j in range(max([0, r - (rad_pxls_h // 2)]), min([h, r + (rad_pxls_h // 2)])):
@@ -39,14 +40,13 @@ def rearrange(input_img, target_img, rad):
                 # print(closeness, arr_in_arr([0, 0], taken) == 0)
 
                 if (closeness > closest) and (arr_in_arr([j, k], taken) == 0):
-                    print("hi inside")
-                    count += 1
                     closest = closeness
                     index[0] = j
                     index[1] = k
 
+        count += 1
+        print(f"Processing: {(count / tot_pix):.2f}% completed")
         taken.append(index)
         output_img[r][c] = input_img[index[0]][index[1]]
 
-    print(len(output_img))
     return output_img
