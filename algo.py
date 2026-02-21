@@ -35,9 +35,12 @@ def rearrange(input_img, target_img, rad):
 
         for j in range(max([0, r - (rad_pxls_h // 2)]), min([h, r + (rad_pxls_h // 2)])):
             for k in range(max([0, c - (rad_pxls_w // 2)]), min([w, c + (rad_pxls_w // 2)])):
+                if (taken[j * w + k] == 1):
+                    continue
+                
                 closeness = cmp_pxls(input_img[j][k], target_img[r][c])
 
-                if (closeness > closest) and (taken[j * w + k] == 0):
+                if (closeness > closest):
                     closest = closeness
                     index[0] = j
                     index[1] = k
