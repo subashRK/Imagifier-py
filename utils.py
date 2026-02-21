@@ -29,28 +29,19 @@ def truncate_img(input_img, target_img):
 
     return input_img, target_img
 
-def compress(input_img, target_img, w, h):
-    inp_row, inp_col = len(input_img), len(input_img[0])
-    factor_h = int(inp_row / h) # Factor to reduce by
-    factor_w = int(inp_col / w) # Factor to reduce by
+def compress(input_img, target_img, factor):
+    inp_row = len(input_img)
 
-    input_img = input_img[0::factor_h]
-    target_img = target_img[0::factor_h]
+    input_img = input_img[0::factor]
+    target_img = target_img[0::factor]
 
     inp_row = len(input_img) # since compressed above we need to chaneg
 
     for i in range(0, inp_row):
-        input_img[i] = input_img[i][0::factor_w]
-        target_img[i] = target_img[i][0::factor_w]
+        input_img[i] = input_img[i][0::factor]
+        target_img[i] = target_img[i][0::factor]
 
     return input_img, target_img
 
 def get_rc(val, w):
     return val // w, val % w
-
-def arr_in_arr(arr1, arr2):
-    for i in arr2:
-        if i[0] == arr1[0] and i[1] == arr1[1]:
-            return 1
-            
-    return 0

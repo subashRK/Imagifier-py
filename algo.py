@@ -1,6 +1,6 @@
 import math
 
-from utils import get_rc, arr_in_arr
+from utils import get_rc
 
 MAX_DIFF_LEN = math.sqrt((255 ** 2) * 3)
 
@@ -23,9 +23,9 @@ def rearrange(input_img, target_img, rad):
     output_img = [[[] for j in range(0, w)] for i in range(0, h)]
     rad_pxls_h = int(h * rad)
     rad_pxls_w = int(w * rad)
-    taken = []
-    count = 0
     tot_pix = w * h
+    taken = [0 for i in range(0, tot_pix)]
+    count = 0
 
     for i in range(0, tot_pix):
         r, c = get_rc(i, w)
@@ -35,18 +35,16 @@ def rearrange(input_img, target_img, rad):
 
         for j in range(max([0, r - (rad_pxls_h // 2)]), min([h, r + (rad_pxls_h // 2)])):
             for k in range(max([0, c - (rad_pxls_w // 2)]), min([w, c + (rad_pxls_w // 2)])):
-                # print(j, k, [j, k] not in taken)
                 closeness = cmp_pxls(input_img[j][k], target_img[r][c])
-                # print(closeness, arr_in_arr([0, 0], taken) == 0)
 
-                if (closeness > closest) and (arr_in_arr([j, k], taken) == 0):
+                if (closeness > closest) and (taken[j * w + k] == 0):
                     closest = closeness
                     index[0] = j
                     index[1] = k
 
         count += 1
-        print(f"Processing: {(count / tot_pix):.2f}% completed")
-        taken.append(index)
+        print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+        taken[index[0] * w + index[1]] = 1
         output_img[r][c] = input_img[index[0]][index[1]]
 
     return output_img

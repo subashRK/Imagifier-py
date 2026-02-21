@@ -9,10 +9,15 @@ from algo import rearrange
 # Global variables
 input_img_path, target_img_path = None, None
 
-#256, 144
-def process_img(input_img, target_img, rad = 0.5, w = 128, h = 77):
+#256, 144; 0.5, 4
+def process_img(input_img, target_img, rad = 0.5, factor = 1):
+    print("Cropping image!")
     input_img, target_img = truncate_img(input_img, target_img)
-    input_img, target_img = compress(input_img, target_img, w, h)
+    print("Finished cropping!")
+
+    print("Compressing image!")
+    input_img, target_img = compress(input_img, target_img, factor)
+    print("Finished compressing!")
 
     output_img = rearrange(input_img, target_img, rad)
 
