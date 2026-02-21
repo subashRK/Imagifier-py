@@ -4,16 +4,19 @@ import numpy
 
 # User defined libraries
 from utils import truncate_img, compress
+from algo import rearrange
 
 # Global variables
 input_img_path, target_img_path = None, None
 
-def process_img(input_img, target_img, threshold = 0.3, w = 256, h = 144):
+#256, 144
+def process_img(input_img, target_img, rad = 0.5, w = 128, h = 77):
     input_img, target_img = truncate_img(input_img, target_img)
     input_img, target_img = compress(input_img, target_img, w, h)
 
-    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}", numpy.array(input_img))
-    cv2.imwrite(f"./output/{target_img_path.split("/")[-1]}", numpy.array(target_img))
+    output_img = rearrange(input_img, target_img, rad)
+
+    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
 
 def main(args):
     if len(args) < 2:

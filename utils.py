@@ -44,3 +44,13 @@ def compress(input_img, target_img, w, h):
         target_img[i] = target_img[i][0::factor_w]
 
     return input_img, target_img
+
+def get_rc(val, w):
+    return val // w, val % w
+
+def arr_in_arr(arr1, arr2):
+    for i in arr2:
+        if i[0] == arr1[0] and i[1] == arr1[1]:
+            return 1
+            
+    return 0
