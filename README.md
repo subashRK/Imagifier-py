@@ -63,3 +63,7 @@ check(old_i)
 Here i is the current position.
 
 I am aware that the overuse of `this` and `that` in my statments might be confusing, but I tried my best!
+
+## Run
+
+python app.py <path_to_input_img> <path_to_target_path>
