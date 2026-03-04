@@ -4,7 +4,7 @@ import numpy
 
 # User defined libraries
 from utils import truncate_img, compress
-from algo import rearrange, best_fit
+from algo import first_fit, best_fit
 
 # Global variables
 input_img_path, target_img_path = None, None
@@ -19,7 +19,7 @@ def process_img(input_img, target_img, rad = 0.6, factor = 6):
     input_img, target_img = compress(input_img, target_img, factor)
     print("Finished compressing!")
 
-    # output_img = rearrange(input_img, target_img, rad)
+    # output_img = first_fit(input_img, target_img, rad)
     output_img = best_fit(input_img, target_img, rad)
 
     cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))

@@ -16,7 +16,7 @@ def cmp_pxls(pxl1, pxl2):
     return 1 - norm_len # 1 indicates same pixel, 0.99 indicates almost same and so on. 
 
 # Try: Algo 1
-def rearrange(input_img, target_img, rad):
+def first_fit(input_img, target_img, rad):
     h = len(target_img)
     w = len(target_img[0])
     output_img = [[[] for j in range(0, w)] for i in range(0, h)]
@@ -61,14 +61,14 @@ def best_fit(input_img, target_img, rad):
     tot_pix = w * h
     taken = [0 for i in range(0, tot_pix)]
     taken_by = [0 for i in range(0, tot_pix)]
-    closeness = closest = count = 0
-    index = [0, 0]
+    count = 0
 
     def check(i):
-        nonlocal count, closeness, closest, index, output_img, taken, taken_by
+        nonlocal count, output_img, taken, taken_by
         r, c = get_rc(i, w)
 
-        closest = 0
+        closeness = closest = 0
+        index = [0, 0]
 
         for j in range(max([0, r - (rad_pxls_h // 2)]), min([h, r + (rad_pxls_h // 2)])):
             for k in range(max([0, c - (rad_pxls_w // 2)]), min([w, c + (rad_pxls_w // 2)])):
