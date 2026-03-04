@@ -35,7 +35,7 @@ def compress(input_img, target_img, factor):
     input_img = input_img[0::factor]
     target_img = target_img[0::factor]
 
-    inp_row = len(input_img) # since compressed above we need to chaneg
+    inp_row = len(input_img) # since compressed above we need to change
 
     for i in range(0, inp_row):
         input_img[i] = input_img[i][0::factor]
