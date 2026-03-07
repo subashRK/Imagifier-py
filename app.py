@@ -20,9 +20,9 @@ def process_img(input_img, target_img, rad = 1, factor = 10):
     print("Finished compressing!")
 
     # output_img = first_fit(input_img, target_img, rad)
-    # output_img = best_fit(input_img, target_img, rad)
+    output_img = best_fit(input_img, target_img, rad)
 
-    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(target_img))
+    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
 
 def main(args):
     if len(args) < 2:
