@@ -9,8 +9,8 @@ from algo import first_fit, best_fit
 # Global variables
 input_img_path, target_img_path = None, None
 
-#256, 144; 0.5, 4
-def process_img(input_img, target_img, rad = 1, factor = 10):
+#256, 144; 0.5, 4; 1, 10
+def process_img(input_img, target_img, rad = 0.3, factor = 10):
     print("Cropping image!")
     input_img, target_img = truncate_img(input_img, target_img)
     print("Finished cropping!")
@@ -22,7 +22,7 @@ def process_img(input_img, target_img, rad = 1, factor = 10):
     # output_img = first_fit(input_img, target_img, rad)
     output_img = best_fit(input_img, target_img, rad)
 
-    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
+    cv2.imwrite(f"./test/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
 
 def main(args):
     if len(args) < 2:

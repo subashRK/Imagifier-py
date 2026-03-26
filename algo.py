@@ -15,6 +15,18 @@ def cmp_pxls(pxl1, pxl2):
     norm_len = pxl_diff_len / MAX_DIFF_LEN
     return 1 - norm_len # 1 indicates same pixel, 0.99 indicates almost same and so on. 
 
+
+# Test
+pix_count = {}
+o_pix_count = {}
+
+def calculate_freq(output_img, tot_pix, w):
+    for i in range(0, tot_pix):
+        r, c = get_rc(i, w)
+        o_pix_count[str(output_img[r][c][0]) + str(output_img[r][c][1]) + str(output_img[r][c][2])] = o_pix_count.get(str(output_img[r][c][0]) + str(output_img[r][c][1]) + str(output_img[r][c][2]), 0) + 1
+
+#test end
+
 # Try: Algo 1
 def first_fit(input_img, target_img, rad):
     h = len(target_img)
@@ -46,25 +58,40 @@ def first_fit(input_img, target_img, rad):
 
         count += 1
         print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+        #test start
+        pix_count[str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2])] = pix_count.get(str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2]), 0) + 1
         taken[index[0] * w + index[1]] = 1
         output_img[r][c] = input_img[index[0]][index[1]]
 
+    calculate_freq(output_img, tot_pix, w)
+
+    count = 0
+
+
+    for i in pix_count.keys():
+        if pix_count[i] != o_pix_count.get(i, 0):
+            count += 1
+            print("Mismatch!", pix_count[i], o_pix_count.get(i, 0))
+
+    print("no of mismatch", count)
+#test end
     return output_img
 
 # Try: Algo 2 (Best fit rather than first fit)
 def best_fit(input_img, target_img, rad):
     h = len(target_img)
     w = len(target_img[0])
-    output_img = [[[] for j in range(0, w)] for i in range(0, h)]
+    output_img = [[[0, 0, 0] for j in range(0, w)] for i in range(0, h)]
     rad_pxls_h = int(h * rad)
     rad_pxls_w = int(w * rad)
     tot_pix = w * h
     taken = [0 for i in range(0, tot_pix)]
     taken_by = [0 for i in range(0, tot_pix)]
+    closeness_arr = [0 for i in range(0, tot_pix)] # stores the closeness value of the matched pixels, corresponds to target images
     count = 0
 
     def check(i):
-        nonlocal count, output_img, taken, taken_by
+        nonlocal count, output_img, taken, taken_by, closeness_arr
         r, c = get_rc(i, w)
 
         closeness = closest = 0
@@ -74,6 +101,12 @@ def best_fit(input_img, target_img, rad):
             for k in range(max([0, c - (rad_pxls_w // 2)]), min([w, c + (rad_pxls_w // 2)])):
                 closeness = cmp_pxls(input_img[j][k], target_img[r][c])
 
+                nr, nc = get_rc(taken_by[j * w + k], w)
+
+                if taken[j * w + k] == 1 and closeness <= closeness_arr[nr * w + nc]:
+                    # print("continue", i, nr * w + nc)
+                    continue
+
                 if (closeness > closest):
                     closest = closeness
                     index[0] = j
@@ -81,19 +114,42 @@ def best_fit(input_img, target_img, rad):
 
         nr, nc = get_rc(taken_by[index[0] * w + index[1]], w)
 
-        if taken[index[0] * w + index[1]] == 1 and closest > cmp_pxls(input_img[index[0]][index[1]], target_img[nr][nc]):
+        if closest != 0 and taken[index[0] * w + index[1]] == 1 and closest > closeness_arr[nr * w + nc]:
             old_i = taken_by[index[0] * w + index[1]]
             taken_by[index[0] * w + index[1]] = i
+            # print("rec", old_i, i, closeness_arr[nr * w + nc], closest)
+            closeness_arr[i] = closest
             check(old_i)
         else:
             count += 1
 
-        print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
-        taken[index[0] * w + index[1]] = 1
-        taken_by[index[0] * w + index[1]] = i
-        output_img[r][c] = input_img[index[0]][index[1]]
+        if index[0] != None:
+            print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+            taken[index[0] * w + index[1]] = 1
+            taken_by[index[0] * w + index[1]] = i
+            closeness_arr[i] = closest
+            output_img[r][c] = input_img[index[0]][index[1]]
 
     for i in range(0, tot_pix):
+        #test start
+        r, c = get_rc(i, w)
+        pix_count[str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2])] = pix_count.get(str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2]), 0) + 1
+        # test end
         check(i)
+
+    #test start
+    calculate_freq(output_img, tot_pix, w)
+
+    count = 0
+
+
+    for i in pix_count.keys():
+
+        if pix_count[i] != o_pix_count.get(i, 0):
+            count += 1
+            print("Mismatch!")
+
+    print("no of mismatch", count)
+    #test end
 
     return output_img
