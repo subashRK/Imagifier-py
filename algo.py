@@ -176,21 +176,33 @@ def bin_selector(input_img, target_img):
         pixel = [int(x) for x in input_img[r][c]]
         bin_i = (pixel[0] + pixel[1] + pixel[2]) // 3
 
-        for j in range(0, 255):
+        for j in range(0, 256):
             n_bin_i = bin_i + j
-            if len(grayscale_bins[n_bin_i]) != 0:
+            if n_bin_i < 256 and len(grayscale_bins[n_bin_i]) != 0:
                 nr, nc = get_rc(grayscale_bins[n_bin_i].pop(0), w)
                 output_img[nr][nc] = input_img[r][c]
                 count += 1
                 break
             n_bin_i = bin_i - j
-            if len(grayscale_bins[n_bin_i]) != 0:
+            if n_bin_i > -1 and len(grayscale_bins[n_bin_i]) != 0:
                 nr, nc = get_rc(grayscale_bins[n_bin_i].pop(0), w)
                 output_img[nr][nc] = input_img[r][c]
                 count += 1
                 break
 
         print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+
+    calculate_freq(output_img, tot_pix, w)
+
+    count = 0
+
+    for i in pix_count.keys():
+
+        if pix_count[i] != o_pix_count.get(i, 0):
+            count += 1
+            print("Mismatch!", pix_count[i], o_pix_count.get(i, 0), i)
+
+    print("no of mismatch", count)
 
     return output_img
         
