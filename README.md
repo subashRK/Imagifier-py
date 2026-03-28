@@ -6,15 +6,15 @@ Built in python, it can tury any input image into any target image just by scram
 
 ### Input Image:
 
-![Input image](images/input/dinesh.jpeg)
+![Input image](images/input/subash.jpeg)
 
 ### Target Image:
 
-![Target image](images/target/ensub.jpeg)
+![Target image](images/target/obama.jpg)
 
-### Output Image:
+### Output Image [Using best fit algorithm]:
 
-![Output image](output/dinesh.jpeg-ensub.jpeg)
+![Output image](output/subash.jpeg-obama.jpg)
 
 > **Note:** The Output image is smaller because before conversion the algorithm truncates and compresses the image for faster processing.
 
@@ -23,7 +23,7 @@ Built in python, it can tury any input image into any target image just by scram
 It uses two main algorithms:
 
 1. **First fit algorithm** (faster)
-2. **Best fit algorithm** (slower)
+2. **Best fit algorithm** (slower) (Very slow don't use it.)
 
 Both the algorithm works based on the same concept. Let me give an idea. Imagine that the input image is the same image as the target image, but the only difference is that the pixels are rearranged randomly. So to generate the orginal image, you traverse each pixel of the target image and for each pixel you compare it with the pixels of the input image, the pixel (which resembles very close to the target image's current pixel) is placed on the corresponding position in the new output image. This is how the algorithm works. Now if the input image is any other image, it tries to find the best matching or the closest matching pixel, for every pixel of the target image and that pixel is placed in the correct position as that of the target image's pixel (to which it matches very close).
 

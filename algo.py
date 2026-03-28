@@ -58,6 +58,10 @@ def first_fit(input_img, target_img, rad):
 
         count += 1
         print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+        if closest == 0:
+            taken[i] = 1
+            print("no closest for", i)
+            continue
         #test start
         pix_count[str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2])] = pix_count.get(str(input_img[r][c][0]) + str(input_img[r][c][1]) + str(input_img[r][c][2]), 0) + 1
         taken[index[0] * w + index[1]] = 1
@@ -71,7 +75,7 @@ def first_fit(input_img, target_img, rad):
     for i in pix_count.keys():
         if pix_count[i] != o_pix_count.get(i, 0):
             count += 1
-            print("Mismatch!", pix_count[i], o_pix_count.get(i, 0))
+            print("Mismatch!", pix_count[i], o_pix_count.get(i, 0), i)
 
     print("no of mismatch", count)
 #test end
@@ -103,14 +107,13 @@ def best_fit(input_img, target_img, rad):
 
                 nr, nc = get_rc(taken_by[j * w + k], w)
 
-                if taken[j * w + k] == 1 and closeness <= closeness_arr[nr * w + nc]:
-                    # print("continue", i, nr * w + nc)
-                    continue
+                # print("continue", i, nr * w + nc)
 
                 if (closeness > closest):
-                    closest = closeness
-                    index[0] = j
-                    index[1] = k
+                    if taken[j * w + k] == 0 or closeness > closeness_arr[nr * w + nc]:
+                        closest = closeness
+                        index[0] = j
+                        index[1] = k
 
         nr, nc = get_rc(taken_by[index[0] * w + index[1]], w)
 
@@ -121,14 +124,15 @@ def best_fit(input_img, target_img, rad):
             closeness_arr[i] = closest
             check(old_i)
         else:
+            if closest == 0:
+                print("No pixel found!")
             count += 1
 
-        if index[0] != None:
-            print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
-            taken[index[0] * w + index[1]] = 1
-            taken_by[index[0] * w + index[1]] = i
-            closeness_arr[i] = closest
-            output_img[r][c] = input_img[index[0]][index[1]]
+        print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+        taken[index[0] * w + index[1]] = 1
+        taken_by[index[0] * w + index[1]] = i
+        closeness_arr[i] = closest
+        output_img[r][c] = input_img[index[0]][index[1]]
 
     for i in range(0, tot_pix):
         #test start
@@ -147,7 +151,7 @@ def best_fit(input_img, target_img, rad):
 
         if pix_count[i] != o_pix_count.get(i, 0):
             count += 1
-            print("Mismatch!")
+            print("Mismatch!", pix_count[i], o_pix_count.get(i, 0), i)
 
     print("no of mismatch", count)
     #test end
