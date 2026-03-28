@@ -14,7 +14,7 @@ Built in python, it can tury any input image into any target image just by scram
 
 ### Output Image [Using best fit algorithm]:
 
-![Output image](output/subash.jpeg-obama.jpg)
+![Output image](test/subash.jpeg-obama.jpg)
 
 > **Note:** The Output image is smaller because before conversion the algorithm truncates and compresses the image for faster processing.
 
