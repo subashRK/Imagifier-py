@@ -22,7 +22,7 @@ def process_img(input_img, target_img, rad = 2, factor = 10):
     # output_img = first_fit(input_img, target_img, rad)
     output_img = first_fit(input_img, target_img, rad)
 
-    cv2.imwrite(f"./test/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
+    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
 
 def main(args):
     if len(args) < 2:
