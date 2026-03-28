@@ -157,3 +157,40 @@ def best_fit(input_img, target_img, rad):
     #test end
 
     return output_img
+
+def bin_selector(input_img, target_img):
+    h = len(target_img)
+    w = len(target_img[0])
+    tot_pix = w * h
+    grayscale_bins = [[] for _ in range(0, 256)]
+    output_img = [[[] for _ in range(0, w)] for _ in range(0, h)]
+    count = 0
+
+    for i in range(0, tot_pix):
+        r, c = get_rc(i, w)
+        pixel = [int(x) for x in target_img[r][c]]
+        grayscale_bins[(pixel[0] + pixel[1] + pixel[2]) // 3].append(i)
+
+    for i in range(0, tot_pix):
+        r, c = get_rc(i, w)
+        pixel = [int(x) for x in input_img[r][c]]
+        bin_i = (pixel[0] + pixel[1] + pixel[2]) // 3
+
+        for j in range(0, 255):
+            n_bin_i = bin_i + j
+            if len(grayscale_bins[n_bin_i]) != 0:
+                nr, nc = get_rc(grayscale_bins[n_bin_i].pop(0), w)
+                output_img[nr][nc] = input_img[r][c]
+                count += 1
+                break
+            n_bin_i = bin_i - j
+            if len(grayscale_bins[n_bin_i]) != 0:
+                nr, nc = get_rc(grayscale_bins[n_bin_i].pop(0), w)
+                output_img[nr][nc] = input_img[r][c]
+                count += 1
+                break
+
+        print(f"Processing: {((count / tot_pix) * 100):.2f}% completed")
+
+    return output_img
+        

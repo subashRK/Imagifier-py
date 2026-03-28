@@ -4,7 +4,7 @@ import numpy
 
 # User defined libraries
 from utils import truncate_img, compress
-from algo import first_fit, best_fit
+from algo import first_fit, best_fit, bin_selector
 
 # Global variables
 input_img_path, target_img_path = None, None
@@ -20,9 +20,10 @@ def process_img(input_img, target_img, rad = 2, factor = 10):
     print("Finished compressing!")
 
     # output_img = first_fit(input_img, target_img, rad)
-    output_img = first_fit(input_img, target_img, rad)
+    # output_img = first_fit(input_img, target_img, rad)
+    output_img = bin_selector(input_img, target_img)
 
-    cv2.imwrite(f"./output/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
+    cv2.imwrite(f"./test/{input_img_path.split("/")[-1]}-{target_img_path.split("/")[-1]}", numpy.array(output_img))
 
 def main(args):
     if len(args) < 2:
